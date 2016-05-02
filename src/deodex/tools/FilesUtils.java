@@ -92,7 +92,7 @@ public class FilesUtils {
 	 * @param in
 	 *            InputStream
 	 * @param dest
-	 *            destination file
+	 *            destination file 
 	 * @return true if the inputStream was saved to the file
 	 */
 	public static boolean copyFile(InputStream in, File dest) {
@@ -302,6 +302,15 @@ public class FilesUtils {
 
 		}
 		String arch = getRomArch(systemFolder);
+		// is the odex have .xposed extention ? if there is we will rename all the odex files 
+		// TODO may be there is more out there ?
+		ArrayList<File> xposed = FilesUtils.searchrecursively(systemFolder, ".odex.xposed");
+		if( !xposed.isEmpty()){
+			for (File f : xposed){
+				f.renameTo(new File(f.getAbsolutePath().substring(0, f.getAbsolutePath().lastIndexOf("."))));
+			}
+		}
+		
 		// can we detetect arch ?
 		if (arch.equals("null") && sdkLevel > 20) {
 			log.addLog(R.getString(S.LOG_ERROR) + R.getString("log.no.arch.detected"));
